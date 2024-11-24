@@ -15,6 +15,7 @@ class Matrix:
   def insert(self, value: int, row: int, col: int) -> None:
     if row < 1 or row > self.rows or col < 1 or col > self.cols:
       raise IndexError('Row or column index out of bounds')
+    
     self.matrix[row - 1][col - 1] = value
   
   # multiplies every element in a matrix by a scalar, returning a new matrix
@@ -29,7 +30,22 @@ class Matrix:
 
   # performs a multiplication of two matrices, returning a new matrix
   def matrix_multiply(self, matrix_multiple: 'Matrix') -> 'Matrix':
-    pass
+    if self.cols != matrix_multiple.rows:
+      raise ValueError("Number of columns in first matrix does not match the number of rows in the second matrix")
+    
+    result = Matrix(self.rows, matrix_multiple.cols)
+
+    for i in range(result.rows):
+      for j in range(result.cols):
+        value = 0
+
+        for k in range(self.cols):
+          value += self.matrix[i][k] * matrix_multiple.matrix[k][j]
+
+        result.matrix[i][j] = value
+    return result
+    
+
 
 if __name__ == "__main__":
   my_matrix = Matrix(2, 2)
@@ -43,6 +59,10 @@ if __name__ == "__main__":
 
   my_matrix.print()
   new_matrix.print()
+
+  multiply = my_matrix.matrix_multiply(new_matrix)
+
+  multiply.print()
 
 
 
